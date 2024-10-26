@@ -5,14 +5,18 @@ on:
     types: [repository_creation]
 
 jobs:
-  automated_repository_creation: 
+  automated_repository_creation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      
       - name: Set execute permissions on the script
         run: chmod +x ./automate_repo_creation.sh
+
       - name: Run the shell script
         env:
-         GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Pass the token from GitHub Secrets
-        run: ./automate_repo_creation.sh "${{ github.event.client_payload.department_name }}" "${{ github.event.client_payload.application_name }}" "${{ github.event.client_payload.repo_name }}"
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          webhook_url="https://webhook.site/193182b7-0e05-460c-aee0-e4c9466cf772"  # Your webhook URL
+          ./automate_repo_creation.sh "${{ github.event.client_payload.department_name }}" "${{ github.event.client_payload.application_name }}" "${{ github.event.client_payload.repo_name }}" "$webhook_url"
