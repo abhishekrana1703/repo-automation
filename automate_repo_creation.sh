@@ -12,7 +12,7 @@ if [[ -z "$department_name" || -z "$application_name" || -z "$repo_name" ]]; the
 fi
 
 # GitHub Organization and Token (These should be set in GitHub Secrets)
-GH_ORG="AutomateFusion"
+GH_ORG="abhishekrana1703"
 GH_TOKEN="$GH_TOKEN"  # Use the token stored in GitHub Secrets
 
 # Log file
