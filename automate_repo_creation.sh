@@ -13,7 +13,7 @@ if [[ -z "$department_name" || -z "$application_name" || -z "$repo_name" ]]; the
 fi
 
 # GitHub Organization and Token (These should be set in GitHub Secrets)
-GH_ORG="abhishekrana1703"
+GH_ORG="abhishekrana1703"  # Ensure this is the correct organization name
 GH_TOKEN="$GH_TOKEN"
 
 # Log file
@@ -34,7 +34,7 @@ send_response_to_webhook() {
 # Function to create GitHub repository
 create_github_repo() {
     echo "$(date): Creating repository: $formatted_repo_name under $GH_ORG organization" | tee -a $log_file
-    response=$(curl -s -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" \
+    response=$(curl -v -s -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" \
         -d "{\"name\": \"$formatted_repo_name\", \"visibility\": \"public\", \"description\": \"Repository for $application_name\", \"has_issues\": true, \"has_wiki\": false}" \
         "$GH_API_URL/orgs/$GH_ORG/repos")
 
