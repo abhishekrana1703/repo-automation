@@ -1,40 +1,18 @@
-name: Create GitHub Repository
+name: Automated Repository Creation
 
 on:
-  workflow_dispatch:
-    inputs:
-      department_name:
-        description: "The department name"
-        required: true
-      application_name:
-        description: "The application name"
-        required: true
-      repo_name:
-        description: "The repository name"
-        required: true
+  repository_dispatch:
+    types: [repository_creation]
 
 jobs:
-  create-repo:
+  automated_repository_creation: 
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Install GitHub CLI
-        run: |
-          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-          sudo apt-add-repository https://cli.github.com/packages
-          sudo apt update
-          sudo apt install gh -y
-
-      - name: Authenticate GitHub CLI
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set execute permissions on the script
+        run: chmod +x ./automate_repo_creation.sh
+      - name: Run the shell script
         env:
-          GH_TOKEN: ${{ secrets.YOUR_GITHUB_TOKEN }}
-        run: |
-          echo "$GH_TOKEN" | gh auth login --with-token
-
-      - name: Run Repository Creation Script
-        run: |
-          chmod +x ./scripts/create_repo.sh
-          ./scripts/create_repo.sh "${{ github.event.inputs.department_name }}" "${{ github.event.inputs.application_name }}" "${{ github.event.inputs.repo_name }}"
+         GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Pass the token from GitHub Secrets
+        run: ./automate_repo_creation.sh "${{ github.event.client_payload.department_name }}" "${{ github.event.client_payload.application_name }}" "${{ github.event.client_payload.repo_name }}"
