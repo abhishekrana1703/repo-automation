@@ -1,0 +1,32 @@
+name: Create GitHub Repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      department_name:
+        description: "The department name"
+        required: true
+      application_name:
+        description: "The application name"
+        required: true
+      repo_name:
+        description: "The repository name"
+        required: true
+
+jobs:
+  create-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Up GitHub CLI
+        uses: actions/setup-gh@v2
+        with:
+          token: ${{ secrets.YOUR_GITHUB_TOKEN }}
+
+      - name: Run Repository Creation Script
+        run: |
+          chmod +x ./create_repo.sh
+          ./create_repo.sh "${{ github.event.inputs.department_name }}" "${{ github.event.inputs.application_name }}" "${{ github.event.inputs.repo_name }}"
